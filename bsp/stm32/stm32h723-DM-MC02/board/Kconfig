@@ -39,8 +39,37 @@ menu "On-chip Peripheral Drivers"
                 endif
 
         endif
+    menuconfig BSP_USING_SPI
+        bool "Enable SPI BUS"
+        default n
+        select RT_USING_SPI
+        if BSP_USING_SPI
+            config BSP_USING_SPI2
+                bool "Enable SPI2 BUS"
+                default n
 
+            config BSP_SPI2_TX_USING_DMA
+                bool "Enable SPI2 TX DMA"
+                depends on BSP_USING_SPI2
+                default n
+
+            config BSP_SPI2_RX_USING_DMA
+                bool "Enable SPI2 RX DMA"
+                depends on BSP_USING_SPI2
+                select BSP_SPI2_TX_USING_DMA
+                default n
+            
+            config BSP_USING_SPI6
+            bool "Enable SPI6 BUS"
+            default n
+
+            config BSP_SPI6_TX_USING_DMA
+                bool "Enable SPI6 TX DMA"
+                depends on BSP_USING_SPI6
+                default n
+        endif
     source "$(BSP_DIR)/../libraries/HAL_Drivers/drivers/Kconfig"
+    rsource "../applications/ws2812/Kconfig"
 
 endmenu
 

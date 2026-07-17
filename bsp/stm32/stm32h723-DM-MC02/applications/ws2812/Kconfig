@@ -1,0 +1,49 @@
+menu "WS2812 Configuration"
+
+menuconfig BSP_USING_WS2812
+    bool "Enable WS2812 driver"
+    default n
+    select RT_USING_SPI
+    select RT_USING_HEAP
+    help
+        Enable the WS2812 LED driver using an SPI bus.
+
+if BSP_USING_WS2812
+
+choice
+    prompt "WS2812 SPI bus"
+    default BSP_WS2812_USING_SPI6
+
+config BSP_WS2812_USING_SPI2
+    bool "Use SPI2"
+    select BSP_USING_SPI
+    select BSP_USING_SPI2
+
+config BSP_WS2812_USING_SPI6
+    bool "Use SPI6"
+    select BSP_USING_SPI
+    select BSP_USING_SPI6
+
+endchoice
+
+config BSP_WS2812_SPI_BUS_NAME
+    string
+    default "spi2" if BSP_WS2812_USING_SPI2
+    default "spi6" if BSP_WS2812_USING_SPI6
+
+config BSP_WS2812_SPI_FREQUENCY
+    int "WS2812 SPI frequency (Hz)"
+    range 1000000 10000000
+    default 4000000
+    help
+        Maximum SPI clock requested from RT-Thread. For SPI6 on this BSP,
+        use 4000000 to obtain an actual 6250000 Hz SCK with 8-bit encoding.
+
+config BSP_WS2812_LED_NUM
+    int "Number of WS2812 LEDs"
+    range 1 1024
+    default 1
+
+endif
+
+endmenu
