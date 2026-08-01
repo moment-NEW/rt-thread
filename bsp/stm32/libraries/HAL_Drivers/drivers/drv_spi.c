@@ -368,6 +368,26 @@ static rt_err_t stm32_spi_init(struct stm32_spi *spi_drv, struct rt_spi_configur
 #endif /* BSP_SPI_TX_USING_DMA */
 #endif /* BSP_SPI_USING_DMA */
 
+#ifdef BSP_SPI_USING_BDMA
+    /* BDMA configuration */
+#if defined(BSP_SPI_RX_USING_BDMA)
+    if(spi_drv->spi_xfer_flags & RT_DEVICE_FLAG_BDMA_RX)
+    {
+        if (stm32_bdma_setup(&spi_drv->bdma.handle_rx,
+                            &spi_drv->handle,
+                            &spi_drv->handle.hdmarx,
+                            spi_drv->config->bdma_rx) != RT_EOK)
+        {
+            stm32_spi_bdma_rollback(spi_drv, RT_DEVICE_FLAG_BDMA_RX);//待实现
+            return -RT_EIO;
+        }
+    }
+#endif /* BSP_SPI_RX_USING_BDMA */
+#if defined(BSP_SPI_TX_USING_BDMA)
+
+#endif /* BSP_SPI_TX_USING_BDMA */
+#endif /* BSP_SPI_USING_BDMA */
+
 #ifdef BSP_SPI_USING_IRQ
     if ((spi_drv->spi_xfer_flags & RT_DEVICE_FLAG_DMA_TX) || (spi_drv->spi_xfer_flags & RT_DEVICE_FLAG_DMA_RX)
      || (spi_drv->spi_xfer_flags & RT_DEVICE_FLAG_INT_TX) || (spi_drv->spi_xfer_flags & RT_DEVICE_FLAG_INT_RX))
@@ -894,6 +914,11 @@ rt_err_t rt_hw_spi_device_detach(const char *device_name)
     return RT_EOK;
 }
 
+
+
+
+
+
 #if defined(BSP_USING_SPI1) && defined(BSP_SPI1_USING_IRQ)
 /**
  * @brief Handle the SPI1 peripheral interrupt.
@@ -1182,6 +1207,21 @@ void SPI6_DMA_TX_IRQHandler(void)
 #endif /* BSP_SPI6_TX_USING_DMA */
 #endif /* defined(BSP_USING_SPI6) && defined(BSP_SPI6_USING_IRQ) */
 
+/**
+* @brief Handle the SPI6 TX BDMA interrupt.
+*
+*/
+void SPI6_BDMA_TX_IRQHandler(void)
+{
+    /* enter interrupt */
+    rt_interrupt_enter();
+
+    HAL_DMA_IRQHandler(&spi_bus_obj[SPI6_INDEX].bdma.handle_tx);
+
+    /* leave interrupt */
+    rt_interrupt_leave();
+}
+
 #ifdef BSP_SPI_USING_IRQ
 /**
  * @brief Populate per-instance SPI transfer flags and DMA configuration pointers.
@@ -1318,6 +1358,11 @@ static void stm32_get_xfer_info(void)
     static const struct stm32_dma_config spi6_dma_tx = SPI6_TX_DMA_CONFIG;
     spi_config[SPI6_INDEX].dma_tx = &spi6_dma_tx;
 #endif
+#ifdef BSP_SPI6_RX_USING_BDMA
+    spi_bus_obj[SPI6_INDEX].spi_xfer_flags |= RT_DEVICE_FLAG_BDMA_RX;
+    /** SPI6 RX BDMA configuration descriptor. */
+    static const struct stm32_dma_config spi6_bdma_rx = SPI6_RX_BDMA_CONFIG;
+    spi_config[SPI6_INDEX].bdma_rx = &spi6_bdma_rx;
 #endif /* BSP_USING_SPI6 */
 }
 

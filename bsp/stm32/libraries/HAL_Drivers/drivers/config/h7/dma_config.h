@@ -149,6 +149,18 @@ extern "C" {
 #define QSPI_DMA_IRQ                     DMA2_Stream7_IRQn
 #endif
 
+/*BDMA */
+#if defined(BSP_SPI6_TX_USING_BDMA) && !defined(SPI6_TX_BDMA_INSTANCE)
+#define SPI6_BDMA_TX_IRQHandler  BDMA_Channel0_IRQHandler
+#define SPI6_TX_BDMA_INSTANCE    BDMA_Channel0
+#define SPI6_TX_BDMA_RCC          RCC_AHB4ENR_BDMAEN
+#define SPI6_TX_BDMA_REQUEST      BDMA_REQUEST_SPI6_TX
+#define SPI6_TX_BDMA_IRQ          BDMA_Channel0_IRQn
+#endif
+
+
+
+
 #ifdef __cplusplus
 }
 #endif
