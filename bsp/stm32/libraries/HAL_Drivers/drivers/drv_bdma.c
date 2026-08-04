@@ -36,14 +36,14 @@ static void stm32_bdma_apply_config(DMA_HandleTypeDef *bdma_handle,
     RT_ASSERT(bdma_config != RT_NULL);
 
     bdma_handle->Instance = bdma_config->Instance;
-    bdma_handle->Init.Request = bdma_config->Request;
-    bdma_handle->Init.Direction = bdma_config->Direction;
-    bdma_handle->Init.PeriphInc = bdma_config->PeriphInc;
-    bdma_handle->Init.MemInc = bdma_config->MemInc;
-    bdma_handle->Init.PeriphDataAlignment = bdma_config->PeriphDataAlignment;
-    bdma_handle->Init.MemDataAlignment = bdma_config->MemDataAlignment;
-    bdma_handle->Init.Mode = bdma_config->Mode;
-    bdma_handle->Init.Priority = bdma_config->Priority;
+    bdma_handle->Init.Request = bdma_config->request;
+    bdma_handle->Init.Direction = bdma_config->direction;
+    bdma_handle->Init.PeriphInc = bdma_config->periph_inc;
+    bdma_handle->Init.MemInc = bdma_config->mem_inc;
+    bdma_handle->Init.PeriphDataAlignment = bdma_config->periph_data_alignment;
+    bdma_handle->Init.MemDataAlignment = bdma_config->mem_data_alignment;
+    bdma_handle->Init.Mode = bdma_config->mode;
+    bdma_handle->Init.Priority = bdma_config->priority;
     //bdma has no fifo or burst support, so no need to configure those fields
 
     

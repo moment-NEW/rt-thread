@@ -8,6 +8,7 @@
  * 2019-01-02     zylx         first version
  * 2019-01-08     SummerGift   clean up the code
  * 2020-05-02     whj4674672   support stm32h7 dma1 and dma2
+ * 2026-08-01     moment-NEW   add BDMA support
  */
 
 #ifndef __DMA_CONFIG_H__
@@ -156,6 +157,14 @@ extern "C" {
 #define SPI6_TX_BDMA_RCC          RCC_AHB4ENR_BDMAEN
 #define SPI6_TX_BDMA_REQUEST      BDMA_REQUEST_SPI6_TX
 #define SPI6_TX_BDMA_IRQ          BDMA_Channel0_IRQn
+#endif
+
+#if defined(BSP_SPI6_RX_USING_BDMA) && !defined(SPI6_RX_BDMA_INSTANCE)
+#define SPI6_BDMA_RX_IRQHandler  BDMA_Channel1_IRQHandler
+#define SPI6_RX_BDMA_INSTANCE    BDMA_Channel1
+#define SPI6_RX_BDMA_RCC          RCC_AHB4ENR_BDMAEN
+#define SPI6_RX_BDMA_REQUEST      BDMA_REQUEST_SPI6_RX
+#define SPI6_RX_BDMA_IRQ          BDMA_Channel1_IRQn
 #endif
 
 

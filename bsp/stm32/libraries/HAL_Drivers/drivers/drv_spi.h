@@ -22,6 +22,7 @@
 #include <rthw.h>
 #include <drv_common.h>
 #include "drv_dma.h"
+#include "drv_bdma.h"
 #include <ipc/completion.h>
 
 /* Enable STM32 hardware SPI driver code when any SPI instance is selected. */
@@ -140,32 +141,32 @@
 #define BSP_SPI_USING_INT
 #endif
 
-/* Aggregate IRQ requirements from DMA and interrupt transfer modes. */
-#if defined(BSP_SPI1_USING_DMA) || defined(BSP_SPI1_USING_INT)
+/* Aggregate IRQ requirements from DMA, BDMA and interrupt transfer modes. */
+#if defined(BSP_SPI1_USING_DMA) || defined(BSP_SPI1_USING_INT) || defined(BSP_SPI1_USING_BDMA)
 #define BSP_SPI1_USING_IRQ
 #endif
 
-#if defined(BSP_SPI2_USING_DMA) || defined(BSP_SPI2_USING_INT)
+#if defined(BSP_SPI2_USING_DMA) || defined(BSP_SPI2_USING_INT) || defined(BSP_SPI2_USING_BDMA)
 #define BSP_SPI2_USING_IRQ
 #endif
 
-#if defined(BSP_SPI3_USING_DMA) || defined(BSP_SPI3_USING_INT)
+#if defined(BSP_SPI3_USING_DMA) || defined(BSP_SPI3_USING_INT) || defined(BSP_SPI3_USING_BDMA)
 #define BSP_SPI3_USING_IRQ
 #endif
 
-#if defined(BSP_SPI4_USING_DMA) || defined(BSP_SPI4_USING_INT)
+#if defined(BSP_SPI4_USING_DMA) || defined(BSP_SPI4_USING_INT) || defined(BSP_SPI4_USING_BDMA)
 #define BSP_SPI4_USING_IRQ
 #endif
 
-#if defined(BSP_SPI5_USING_DMA) || defined(BSP_SPI5_USING_INT)
+#if defined(BSP_SPI5_USING_DMA) || defined(BSP_SPI5_USING_INT) || defined(BSP_SPI5_USING_BDMA)
 #define BSP_SPI5_USING_IRQ
 #endif
 
-#if defined(BSP_SPI6_USING_DMA) || defined(BSP_SPI6_USING_INT)
+#if defined(BSP_SPI6_USING_DMA) || defined(BSP_SPI6_USING_INT) || defined(BSP_SPI6_USING_BDMA)
 #define BSP_SPI6_USING_IRQ
 #endif
 
-#if defined(BSP_SPI_USING_DMA) || defined(BSP_SPI_USING_INT)
+#if defined(BSP_SPI_USING_DMA) || defined(BSP_SPI_USING_INT) || defined(BSP_SPI_USING_BDMA)
 #define BSP_SPI_USING_IRQ
 #endif
 
@@ -209,6 +210,12 @@ struct stm32_spi_config
 #ifdef BSP_SPI_TX_USING_DMA
     const struct stm32_dma_config *dma_tx; /**< TX DMA configuration. */
 #endif /* BSP_SPI_TX_USING_DMA */
+#ifdef BSP_SPI_RX_USING_BDMA
+    const struct stm32_bdma_config *bdma_rx; /**< RX BDMA configuration. */
+#endif /* BSP_SPI_RX_USING_BDMA */
+#ifdef BSP_SPI_TX_USING_BDMA
+    const struct stm32_bdma_config *bdma_tx; /**< TX BDMA configuration. */
+#endif /* BSP_SPI_TX_USING_BDMA */
 };
 
 /**
@@ -245,6 +252,17 @@ struct stm32_spi
 #endif /* BSP_SPI_TX_USING_DMA */
     } dma;                             /**< DMA handles associated with this SPI bus. */
 #endif /* BSP_SPI_USING_DMA */
+#ifdef BSP_SPI_USING_BDMA
+    struct
+    {
+#ifdef BSP_SPI_RX_USING_BDMA
+        DMA_HandleTypeDef handle_rx;   /**< STM32 HAL RX BDMA handle. */
+#endif /* BSP_SPI_RX_USING_BDMA */
+#ifdef BSP_SPI_TX_USING_BDMA
+        DMA_HandleTypeDef handle_tx;   /**< STM32 HAL TX BDMA handle. */
+#endif /* BSP_SPI_TX_USING_BDMA */
+    } bdma;                            /**< BDMA handles associated with this SPI bus. */
+#endif /* BSP_SPI_USING_BDMA */
 };
 
 #endif /*__DRV_SPI_H__ */
