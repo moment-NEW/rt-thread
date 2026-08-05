@@ -131,67 +131,66 @@ static struct stm32_spi_config spi_config[] =
  */
 static struct stm32_spi spi_bus_obj[sizeof(spi_config) / sizeof(spi_config[0])] = {0};
 
-#ifdef BSP_SPI_USING_DMA
+#if defined(BSP_SPI_USING_DMA) || defined(BSP_SPI_USING_BDMA)
 /**
- * @brief Roll back SPI DMA setup that was partially initialized.
+ * @brief Roll back SPI DMA/BDMA setup that was partially initialized.
+ *
+ * @note DMA and BDMA share the RT_DEVICE_FLAG_DMA_* bits. The engine used
+ *       by an instance is selected by its dma_*/bdma_* config pointer, so
+ *       both engines are handled here.
  *
  * @param spi_drv STM32 SPI driver context.
- * @param dma_flags RT_DEVICE_FLAG_DMA_* bits indicating DMA channels to release.
+ * @param dma_flags RT_DEVICE_FLAG_DMA_* bits indicating channels to release.
  */
 static void stm32_spi_dma_rollback(struct stm32_spi *spi_drv, rt_uint16_t dma_flags)
 {
-#if defined(BSP_SPI_RX_USING_DMA)
-    if ((dma_flags & RT_DEVICE_FLAG_DMA_RX) && (spi_drv->config->dma_rx != RT_NULL))
+#if defined(BSP_SPI_RX_USING_DMA) || defined(BSP_SPI_RX_USING_BDMA)
+    if (dma_flags & RT_DEVICE_FLAG_DMA_RX)
     {
-        (void)stm32_dma_deinit(&spi_drv->dma.handle_rx, spi_drv->config->dma_rx, RT_FALSE);
-        spi_drv->dma.handle_rx.Parent = RT_NULL;
-        spi_drv->handle.hdmarx = RT_NULL;
-    }
-#endif /* BSP_SPI_RX_USING_DMA */
-
-#if defined(BSP_SPI_TX_USING_DMA)
-    if ((dma_flags & RT_DEVICE_FLAG_DMA_TX) && (spi_drv->config->dma_tx != RT_NULL))
-    {
-        (void)stm32_dma_deinit(&spi_drv->dma.handle_tx, spi_drv->config->dma_tx, RT_FALSE);
-        spi_drv->dma.handle_tx.Parent = RT_NULL;
-        spi_drv->handle.hdmatx = RT_NULL;
-    }
-#endif /* BSP_SPI_TX_USING_DMA */
-}
-#endif /* BSP_SPI_USING_DMA */
-#ifdef BSP_SPI_USING_BDMA
-
-/**
- * @brief Roll back SPI BDMA setup that was partially initialized.
- *
- * @note BDMA reuses the RT_DEVICE_FLAG_DMA_* bits; the engine is selected
- *       by the bdma_rx/bdma_tx config pointer.
- *
- * @param spi_drv STM32 SPI driver context.
- * @param bdma_flags RT_DEVICE_FLAG_DMA_* bits indicating BDMA channels to release.
- */
-static void stm32_spi_bdma_rollback(struct stm32_spi *spi_drv, rt_uint16_t bdma_flags)
-{
 #if defined(BSP_SPI_RX_USING_BDMA)
-    if ((bdma_flags & RT_DEVICE_FLAG_DMA_RX) && (spi_drv->config->bdma_rx != RT_NULL))
-    {
-        (void)stm32_bdma_deinit(&spi_drv->bdma.handle_rx, spi_drv->config->bdma_rx, RT_FALSE);
-        spi_drv->bdma.handle_rx.Parent = RT_NULL;
-        spi_drv->handle.hdmarx = RT_NULL;
-    }
+        if (spi_drv->config->bdma_rx != RT_NULL)
+        {
+            (void)stm32_bdma_deinit(&spi_drv->bdma.handle_rx, spi_drv->config->bdma_rx, RT_FALSE);
+            spi_drv->bdma.handle_rx.Parent = RT_NULL;
+            spi_drv->handle.hdmarx = RT_NULL;
+        }
 #endif /* BSP_SPI_RX_USING_BDMA */
 
-#if defined(BSP_SPI_TX_USING_BDMA)
-    if ((bdma_flags & RT_DEVICE_FLAG_DMA_TX) && (spi_drv->config->bdma_tx != RT_NULL))
-    {
-        (void)stm32_bdma_deinit(&spi_drv->bdma.handle_tx, spi_drv->config->bdma_tx, RT_FALSE);
-        spi_drv->bdma.handle_tx.Parent = RT_NULL;
-        spi_drv->handle.hdmatx = RT_NULL;
+#if defined(BSP_SPI_RX_USING_DMA)
+        if (spi_drv->config->dma_rx != RT_NULL)
+        {
+            (void)stm32_dma_deinit(&spi_drv->dma.handle_rx, spi_drv->config->dma_rx, RT_FALSE);
+            spi_drv->dma.handle_rx.Parent = RT_NULL;
+            spi_drv->handle.hdmarx = RT_NULL;
+        }
+#endif /* BSP_SPI_RX_USING_DMA */
     }
-#endif /* BSP_SPI_TX_USING_BDMA */
-}
+#endif /* BSP_SPI_RX_USING_DMA || BSP_SPI_RX_USING_BDMA */
 
-#endif /* BSP_SPI_USING_BDMA */
+#if defined(BSP_SPI_TX_USING_DMA) || defined(BSP_SPI_TX_USING_BDMA)
+    if (dma_flags & RT_DEVICE_FLAG_DMA_TX)
+    {
+#if defined(BSP_SPI_TX_USING_BDMA)
+        if (spi_drv->config->bdma_tx != RT_NULL)
+        {
+            (void)stm32_bdma_deinit(&spi_drv->bdma.handle_tx, spi_drv->config->bdma_tx, RT_FALSE);
+            spi_drv->bdma.handle_tx.Parent = RT_NULL;
+            spi_drv->handle.hdmatx = RT_NULL;
+        }
+#endif /* BSP_SPI_TX_USING_BDMA */
+
+#if defined(BSP_SPI_TX_USING_DMA)
+        if (spi_drv->config->dma_tx != RT_NULL)
+        {
+            (void)stm32_dma_deinit(&spi_drv->dma.handle_tx, spi_drv->config->dma_tx, RT_FALSE);
+            spi_drv->dma.handle_tx.Parent = RT_NULL;
+            spi_drv->handle.hdmatx = RT_NULL;
+        }
+#endif /* BSP_SPI_TX_USING_DMA */
+    }
+#endif /* BSP_SPI_TX_USING_DMA || BSP_SPI_TX_USING_BDMA */
+}
+#endif /* BSP_SPI_USING_DMA || BSP_SPI_USING_BDMA */
 /**
  * @brief Initialize an STM32 SPI instance according to an RT-Thread SPI configuration.
  *
@@ -410,7 +409,7 @@ static rt_err_t stm32_spi_init(struct stm32_spi *spi_drv, struct rt_spi_configur
                             &spi_drv->handle.hdmarx,
                             spi_drv->config->bdma_rx) != RT_EOK)
         {
-            stm32_spi_bdma_rollback(spi_drv, RT_DEVICE_FLAG_DMA_RX);
+            stm32_spi_dma_rollback(spi_drv, RT_DEVICE_FLAG_DMA_RX);
             return -RT_EIO;
         }
     }
@@ -424,7 +423,7 @@ static rt_err_t stm32_spi_init(struct stm32_spi *spi_drv, struct rt_spi_configur
                             &spi_drv->handle.hdmatx,
                             spi_drv->config->bdma_tx) != RT_EOK)
         {
-            stm32_spi_bdma_rollback(spi_drv,
+            stm32_spi_dma_rollback(spi_drv,
                         RT_DEVICE_FLAG_DMA_TX |
                         (spi_drv->spi_xfer_flags & RT_DEVICE_FLAG_DMA_RX));
             return -RT_EIO;
