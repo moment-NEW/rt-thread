@@ -7,6 +7,7 @@
  * Date           Author       Notes
  * 2018-11-06     SummerGift   first version
  * 2026-04-13     wdfk-prog    Unify DMA config descriptors
+ * 2026-08-01     moment-NEW   add SPI6 & BDMA support
  */
 
 #ifndef __SPI_CONFIG_H__
@@ -342,7 +343,61 @@ extern "C" {
         .irq_type = SPI6_IRQn, \
     }
 #endif /* SPI6_BUS_CONFIG */
+
+#ifdef BSP_SPI6_TX_USING_BDMA
+#ifndef SPI6_TX_BDMA_PRIORITY
+#define SPI6_TX_BDMA_PRIORITY                  DMA_PRIORITY_LOW
+#endif /* SPI6_TX_BDMA_PRIORITY */
+
+#ifndef SPI6_TX_BDMA_PREEMPT_PRIORITY
+#define SPI6_TX_BDMA_PREEMPT_PRIORITY          1
+#endif /* SPI6_TX_BDMA_PREEMPT_PRIORITY */
+
+#ifndef SPI6_TX_BDMA_SUB_PRIORITY
+#define SPI6_TX_BDMA_SUB_PRIORITY              0
+#endif /* SPI6_TX_BDMA_SUB_PRIORITY */
+
+#ifndef SPI6_TX_BDMA_CONFIG
+#define SPI6_TX_BDMA_CONFIG            \
+    STM32_BDMA_TX_BYTE_CONFIG_INIT_EX( \
+        SPI6_TX_BDMA_INSTANCE,         \
+        SPI6_TX_BDMA_RCC,              \
+        SPI6_TX_BDMA_IRQ,              \
+        BDMA_REQUEST_SPI6_TX,          \
+        SPI6_TX_BDMA_PRIORITY,         \
+        SPI6_TX_BDMA_PREEMPT_PRIORITY, \
+        SPI6_TX_BDMA_SUB_PRIORITY)
+#endif /* SPI6_TX_BDMA_CONFIG */
+#endif /* BSP_SPI6_TX_USING_BDMA */
+
+#ifdef BSP_SPI6_RX_USING_BDMA
+#ifndef SPI6_RX_BDMA_PRIORITY
+#define SPI6_RX_BDMA_PRIORITY                  DMA_PRIORITY_HIGH
+#endif /* SPI6_RX_BDMA_PRIORITY */
+
+#ifndef SPI6_RX_BDMA_PREEMPT_PRIORITY
+#define SPI6_RX_BDMA_PREEMPT_PRIORITY          0
+#endif /* SPI6_RX_BDMA_PREEMPT_PRIORITY */
+
+#ifndef SPI6_RX_BDMA_SUB_PRIORITY
+#define SPI6_RX_BDMA_SUB_PRIORITY              0
+#endif /* SPI6_RX_BDMA_SUB_PRIORITY */
+
+#ifndef SPI6_RX_BDMA_CONFIG
+#define SPI6_RX_BDMA_CONFIG            \
+    STM32_BDMA_RX_BYTE_CONFIG_INIT_EX( \
+        SPI6_RX_BDMA_INSTANCE,         \
+        SPI6_RX_BDMA_RCC,              \
+        SPI6_RX_BDMA_IRQ,              \
+        BDMA_REQUEST_SPI6_RX,          \
+        SPI6_RX_BDMA_PRIORITY,         \
+        SPI6_RX_BDMA_PREEMPT_PRIORITY, \
+        SPI6_RX_BDMA_SUB_PRIORITY)
+#endif /* SPI6_RX_BDMA_CONFIG */
+#endif /* BSP_SPI6_RX_USING_BDMA */ 
+
 #endif /* BSP_USING_SPI6 */
+
 
 
 #ifdef __cplusplus
