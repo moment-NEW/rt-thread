@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2006-2026, RT-Thread Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2026-07-22     moment-NEW   first version
+ */
 #define LOG_TAG              "drv.bdma"
 #include <drv_log.h>
 
@@ -8,12 +17,6 @@
 
 
 
-//由于BDMA和DMA的配置有很多相似之处，所以后续可以考虑增加一些公有API
-//一个小问题是BDMA使用与DMA相同的HAL库，因此必然触发HAL_DMA_MODULE_ENABLED
-//这个宏会导致DMA相关的代码被编译进来，在某些情况下可能是不必要的，并且如果要添加DMA的配置宏，大量userspcace会被破坏
-//可能的解决方案是使用更复杂的宏？或者修改Kconfig/Scons配置方式，或者重构BDMA使其直接使用LL库之类
-//暂且搁置。
-//暂记：可能需要和DMA配置联动，如果DMA已经配置了部分，就不用重新配置之类
 
 static void stm32_bdma_enable_clock(rt_uint32_t dma_rcc)
 {
@@ -44,9 +47,7 @@ static void stm32_bdma_apply_config(DMA_HandleTypeDef *bdma_handle,
     bdma_handle->Init.MemDataAlignment = bdma_config->mem_data_alignment;
     bdma_handle->Init.Mode = bdma_config->mode;
     bdma_handle->Init.Priority = bdma_config->priority;
-    //bdma has no fifo or burst support, so no need to configure those fields
-
-    
+    /* BDMA has no FIFO or burst support, so no need to configure those fields. */
 }
 /**
  * @brief Release one DMA IRQ line and disable it when no user remains.
@@ -129,12 +130,12 @@ rt_err_t stm32_bdma_setup(DMA_HandleTypeDef *bdma_handle,
 
     *dma_slot = bdma_handle;
     bdma_handle->Parent = parent_handle;
-    
-    level = rt_hw_interrupt_disable();//避免释放/申请DMA的同时错误读写IRQ
 
-    HAL_NVIC_SetPriority(bdma_config->dma_irq, 
-        bdma_config->preempt_priority, 0);//for convenient,subpriority is set to 0
-       
+    /* Protect the DMA IRQ from concurrent request and release. */
+
+    HAL_NVIC_SetPriority(bdma_config->dma_irq,
+        bdma_config->preempt_priority, 0);/* Sub-priority is set to 0. */
+
     HAL_NVIC_EnableIRQ(bdma_config->dma_irq);
 
     rt_hw_interrupt_enable(level);
@@ -170,3 +171,4 @@ rt_err_t stm32_bdma_deinit(DMA_HandleTypeDef *bdma_handle,
 
     return RT_EOK;
 }
+

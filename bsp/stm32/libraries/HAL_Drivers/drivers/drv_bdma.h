@@ -14,8 +14,11 @@
 #include <board.h>
 
 #if defined(BSP_USING_BDMA) && defined(HAL_DMA_MODULE_ENABLED)
-/*NOTE:the only mcu series that I can test BDMA on is STM32H7 */
-/*so there's only one series supported now, if needed, you can add more series here*/
+/*
+ * NOTE: The only MCU series available for BDMA testing is STM32H7,
+ * so only one series is supported now. More series can be added here
+ * if needed.
+ */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -34,8 +37,9 @@ extern "C" {
 #endif  /* STM32_BDMA_DEFAULT_SUB_PRIORITY */
 
 #if defined(SOC_SERIES_STM32H7) || defined(SOC_SERIES_STM32H7RS)
-/*structs*/
-
+/**
+ * @brief Static BDMA endpoint description used by board-level config headers.
+ */
 struct stm32_bdma_config
 {
     void *Instance;                      /**< BDMA channel instance pointer. */
@@ -60,11 +64,10 @@ rt_err_t stm32_bdma_setup(DMA_HandleTypeDef *handle,
                           void *parent_handle,
                           DMA_HandleTypeDef **dma_slot,
                           const struct stm32_bdma_config *config);
-                    
+
 rt_err_t stm32_bdma_deinit(DMA_HandleTypeDef *handle,
                            const struct stm32_bdma_config *config,
                            rt_bool_t abort_first);
-#define STM32_BDMA_USES_REQUEST
 #endif /* defined(SOC_SERIES_STM32H7) || defined(SOC_SERIES_STM32H7RS) */
 
 
@@ -122,3 +125,4 @@ rt_err_t stm32_bdma_deinit(DMA_HandleTypeDef *handle,
 #endif /* __cplusplus */
 #endif /* defined(BSP_USING_BDMA) && defined(HAL_DMA_MODULE_ENABLED) */
 #endif /* __DRV_BDMA_H_ */
+

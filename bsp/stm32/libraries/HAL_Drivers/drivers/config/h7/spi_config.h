@@ -394,7 +394,7 @@ extern "C" {
         SPI6_RX_BDMA_PREEMPT_PRIORITY, \
         SPI6_RX_BDMA_SUB_PRIORITY)
 #endif /* SPI6_RX_BDMA_CONFIG */
-#endif /* BSP_SPI6_RX_USING_BDMA */ 
+#endif /* BSP_SPI6_RX_USING_BDMA */
 
 #endif /* BSP_USING_SPI6 */
 

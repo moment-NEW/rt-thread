@@ -362,3 +362,4 @@ rt_err_t stm32_dma_deinit(DMA_HandleTypeDef *dma_handle,
 #endif
 
 #endif /* __DRV_DMA_H_ */
+

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2025 RT-Thread Development Team
+ * Copyright (c) 2006-2026, RT-Thread Development Team
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -266,3 +266,4 @@ struct stm32_spi
 };
 
 #endif /*__DRV_SPI_H__ */
+

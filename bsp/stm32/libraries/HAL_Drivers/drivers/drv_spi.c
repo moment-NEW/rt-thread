@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2025 RT-Thread Development Team
+ * Copyright (c) 2006-2026, RT-Thread Development Team
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -539,6 +539,7 @@ static rt_ssize_t spixfer(struct rt_spi_device *device, struct rt_spi_message *m
         {
             send_buf = (rt_uint8_t *)message->send_buf + already_send_length;
         }
+
         if (message->recv_buf)
         {
             recv_buf = (rt_uint8_t *)message->recv_buf + already_send_length;
@@ -603,7 +604,7 @@ static rt_ssize_t spixfer(struct rt_spi_device *device, struct rt_spi_message *m
             }
 
 #if defined(SOC_SERIES_STM32H7) || defined(SOC_SERIES_STM32F7)
-            // D-Cache maintenance for buffers that will be used by DMA
+            /* D-Cache maintenance for buffers that will be used by DMA */
             if (dma_send_buf) rt_hw_cpu_dcache_ops(RT_HW_CACHE_FLUSH, (void *)dma_send_buf, send_length);
             if (dma_recv_buf) rt_hw_cpu_dcache_ops(RT_HW_CACHE_FLUSH, dma_recv_buf, send_length);
 #endif
@@ -801,7 +802,7 @@ transfer_cleanup:
             }
         }
 
-        // Free any temporary buffers that were allocated
+        /* Free any temporary buffers that were allocated */
         if (aligned_send_buf) rt_free_align(aligned_send_buf);
         if (aligned_recv_buf) rt_free_align(aligned_recv_buf);
 #endif /* BSP_SPI_USING_DMA || BSP_SPI_USING_BDMA */

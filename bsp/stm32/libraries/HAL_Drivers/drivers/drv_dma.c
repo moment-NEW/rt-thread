@@ -15,7 +15,7 @@
 
 #include "drv_dma.h"
 
-// #define DRV_DEBUG
+/* #define DRV_DEBUG */
 #define LOG_TAG             "drv.dma"
 #include <drv_log.h>
 /*
@@ -355,3 +355,4 @@ rt_err_t stm32_dma_deinit(DMA_HandleTypeDef *dma_handle,
     return RT_EOK;
 }
 #endif /* HAL_DMA_MODULE_ENABLED */
+
