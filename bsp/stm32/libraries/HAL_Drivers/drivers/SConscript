@@ -11,7 +11,7 @@ src = []
 
 src += ['drv_dma.c']
 path = [cwd]
-if GetDepend(['RT_USING_BDMA']):
+if GetDepend(['BSP_USING_BDMA']):
     src += ['drv_bdma.c']
 
 if GetDepend(['RT_USING_PIN']):

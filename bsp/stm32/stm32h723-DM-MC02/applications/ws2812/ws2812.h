@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2026-07-12     user         first version
+ * 2026-07-12     moment-NEW         first version
  */
 
 #ifndef __WS2812_H__

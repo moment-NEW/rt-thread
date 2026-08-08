@@ -432,17 +432,21 @@
 
 /* On-chip Peripheral Drivers */
 
+#define BSP_USING_BDMA
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_STM32_UART_V1_TX_TIMEOUT 6000
 #define BSP_USING_UART1
 #define BSP_USING_SPI
 #define BSP_USING_SPI6
+#define BSP_SPI6_TX_USING_BDMA
+#define BSP_SPI6_RX_USING_BDMA
 
 /* WS2812 Configuration */
 
 #define BSP_USING_WS2812
 #define BSP_WS2812_USING_SPI6
+#define BSP_WS2812_USING_BDMA
 #define BSP_WS2812_SPI_BUS_NAME "spi6"
 #define BSP_WS2812_SPI_FREQUENCY 4000000
 #define BSP_WS2812_LED_NUM 1

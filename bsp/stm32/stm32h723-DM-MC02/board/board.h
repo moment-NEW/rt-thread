@@ -16,6 +16,23 @@
 #include "drv_common.h"
 #include "drv_gpio.h"
 
+/* BDMA transfer mode aggregation (SPI6 is the only BDMA-capable instance). */
+#if defined(BSP_SPI6_TX_USING_BDMA) || defined(BSP_SPI6_RX_USING_BDMA)
+#define BSP_SPI6_USING_BDMA
+#endif
+
+#if defined(BSP_SPI6_TX_USING_BDMA)
+#define BSP_SPI_TX_USING_BDMA
+#endif
+
+#if defined(BSP_SPI6_RX_USING_BDMA)
+#define BSP_SPI_RX_USING_BDMA
+#endif
+
+#if defined(BSP_SPI_TX_USING_BDMA) || defined(BSP_SPI_RX_USING_BDMA)
+#define BSP_SPI_USING_BDMA
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

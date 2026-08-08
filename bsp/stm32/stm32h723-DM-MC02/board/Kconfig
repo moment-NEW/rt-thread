@@ -6,6 +6,10 @@ endmenu
 
 menu "On-chip Peripheral Drivers"
 
+    config BSP_USING_BDMA
+        bool
+        default n
+
     config BSP_USING_GPIO
         bool "Enable GPIO"
         select RT_USING_PIN
@@ -59,14 +63,33 @@ menu "On-chip Peripheral Drivers"
                 select BSP_SPI2_TX_USING_DMA
                 default n
             
-            config BSP_USING_SPI6
-            bool "Enable SPI6 BUS"
-            default n
-
-            config BSP_SPI6_TX_USING_DMA
-                bool "Enable SPI6 TX DMA"
-                depends on BSP_USING_SPI6
+            menuconfig BSP_USING_SPI6
+                bool "Enable SPI6 BUS"
                 default n
+                if BSP_USING_SPI6
+                    choice
+                        prompt "SPI6 TX Mode"
+                        default BSP_SPI6_TX_USING_POLL
+                        config BSP_SPI6_TX_USING_POLL
+                            bool "SPI6 TX Poll"
+                        config BSP_SPI6_TX_USING_DMA
+                            bool "SPI6 TX DMA"
+                        config BSP_SPI6_TX_USING_BDMA
+                            bool "SPI6 TX BDMA"
+                            select BSP_USING_BDMA
+                    endchoice
+                    choice
+                        prompt "SPI6 RX Mode"
+                        default BSP_SPI6_RX_USING_POLL
+                        config BSP_SPI6_RX_USING_POLL
+                            bool "SPI6 RX Poll"
+                        config BSP_SPI6_RX_USING_DMA
+                            bool "SPI6 RX DMA"
+                        config BSP_SPI6_RX_USING_BDMA
+                            bool "SPI6 RX BDMA"
+                            select BSP_USING_BDMA
+                    endchoice
+                endif
         endif
     source "$(BSP_DIR)/../libraries/HAL_Drivers/drivers/Kconfig"
     rsource "../applications/ws2812/Kconfig"

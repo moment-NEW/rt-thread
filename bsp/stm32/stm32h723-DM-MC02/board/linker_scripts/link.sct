@@ -8,8 +8,13 @@ LR_IROM1 0x08000000 0x00100000  {    ; load region size_region
    *(InRoot$$Sections)
    .ANY (+RO)
   }
+  RW_SRAM4 0x38000000 0x00008000  {
+    *(.ws2812_bdma)
+  }
+
   RW_IRAM1 0x24000000 0x00050000  {  ; RW data
    .ANY (+RW +ZI)
   }
+  
 }
 

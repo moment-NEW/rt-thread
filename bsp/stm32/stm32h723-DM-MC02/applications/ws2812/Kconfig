@@ -26,6 +26,29 @@ config BSP_WS2812_USING_SPI6
 
 endchoice
 
+choice
+    prompt "WS2812 SPI transfer mode"
+    default BSP_WS2812_USING_POLL
+
+config BSP_WS2812_USING_POLL
+    bool "Polling"
+
+config BSP_WS2812_USING_DMA
+    bool "DMA"
+    select BSP_SPI2_TX_USING_DMA if BSP_WS2812_USING_SPI2
+    select BSP_SPI2_RX_USING_DMA if BSP_WS2812_USING_SPI2
+    select BSP_SPI6_TX_USING_DMA if BSP_WS2812_USING_SPI6
+    select BSP_SPI6_RX_USING_DMA if BSP_WS2812_USING_SPI6
+
+config BSP_WS2812_USING_BDMA
+    bool "BDMA (SPI6 only)"
+    depends on BSP_WS2812_USING_SPI6
+    select BSP_USING_BDMA
+    select BSP_SPI6_TX_USING_BDMA
+    select BSP_SPI6_RX_USING_BDMA
+
+endchoice
+
 config BSP_WS2812_SPI_BUS_NAME
     string
     default "spi2" if BSP_WS2812_USING_SPI2

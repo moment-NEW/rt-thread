@@ -13,7 +13,7 @@
 #include <rtthread.h>
 #include <board.h>
 
-#if defined(RT_USING_BDMA) && defined(HAL_DMA_MODULE_ENABLED)
+#if defined(BSP_USING_BDMA) && defined(HAL_DMA_MODULE_ENABLED)
 /*NOTE:the only mcu series that I can test BDMA on is STM32H7 */
 /*so there's only one series supported now, if needed, you can add more series here*/
 #ifdef __cplusplus
@@ -34,6 +34,25 @@ extern "C" {
 #endif  /* STM32_BDMA_DEFAULT_SUB_PRIORITY */
 
 #if defined(SOC_SERIES_STM32H7) || defined(SOC_SERIES_STM32H7RS)
+/*structs*/
+
+struct stm32_bdma_config
+{
+    void *Instance;                      /**< BDMA channel instance pointer. */
+    rt_uint32_t dma_rcc;                 /**< RCC enable bit for the BDMA controller. */
+    IRQn_Type dma_irq;                   /**< NVIC IRQ number for the BDMA channel. */
+    rt_uint32_t priority;                /**< BDMA transfer priority. */
+    rt_uint8_t preempt_priority;         /**< NVIC preempt priority for the BDMA IRQ. */
+    rt_uint8_t sub_priority;             /**< NVIC sub priority for the BDMA IRQ. */
+    rt_uint32_t request;                 /**< BDMA request selector. */
+    rt_uint32_t direction;               /**< BDMA transfer direction. */
+    rt_uint32_t periph_inc;              /**< Peripheral address increment mode. */
+    rt_uint32_t mem_inc;                 /**< Memory address increment mode. */
+    rt_uint32_t periph_data_alignment;   /**< Peripheral data alignment. */
+    rt_uint32_t mem_data_alignment;      /**< Memory data alignment. */
+    rt_uint32_t mode;                    /**< BDMA transfer mode. */
+};
+
 
 rt_err_t stm32_bdma_init(DMA_HandleTypeDef *handle,
                          const struct stm32_bdma_config *config);
@@ -83,24 +102,7 @@ rt_err_t stm32_bdma_deinit(DMA_HandleTypeDef *handle,
 
 
 
-/*structs*/
 
-struct stm32_bdma_config
-{
-    DMA_Channel_TypeDef *Instance;       /**< BDMA channel instance pointer. */
-    rt_uint32_t dma_rcc;                 /**< RCC enable bit for the BDMA controller. */
-    IRQn_Type dma_irq;                   /**< NVIC IRQ number for the BDMA channel. */
-    rt_uint32_t priority;                /**< BDMA transfer priority. */
-    rt_uint8_t preempt_priority;         /**< NVIC preempt priority for the BDMA IRQ. */
-    rt_uint8_t sub_priority;             /**< NVIC sub priority for the BDMA IRQ. */
-    rt_uint32_t request;                 /**< BDMA request selector. */
-    rt_uint32_t direction;               /**< BDMA transfer direction. */
-    rt_uint32_t periph_inc;              /**< Peripheral address increment mode. */
-    rt_uint32_t mem_inc;                 /**< Memory address increment mode. */
-    rt_uint32_t periph_data_alignment;   /**< Peripheral data alignment. */
-    rt_uint32_t mem_data_alignment;      /**< Memory data alignment. */
-    rt_uint32_t mode;                    /**< BDMA transfer mode. */
-};
 
 
 
@@ -118,5 +120,5 @@ struct stm32_bdma_config
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* defined(RT_USING_BDMA) && defined(HAL_DMA_MODULE_ENABLED) */
+#endif /* defined(BSP_USING_BDMA) && defined(HAL_DMA_MODULE_ENABLED) */
 #endif /* __DRV_BDMA_H_ */

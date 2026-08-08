@@ -136,7 +136,7 @@ static struct stm32_spi spi_bus_obj[sizeof(spi_config) / sizeof(spi_config[0])] 
  * @brief Roll back SPI DMA/BDMA setup that was partially initialized.
  *
  * @note DMA and BDMA share the RT_DEVICE_FLAG_DMA_* bits. The engine used
- *       by an instance is selected by its dma_*/bdma_* config pointer, so
+ *       by an instance is selected by its dma_* / bdma_* config pointer, so
  *       both engines are handled here.
  *
  * @param spi_drv STM32 SPI driver context.
