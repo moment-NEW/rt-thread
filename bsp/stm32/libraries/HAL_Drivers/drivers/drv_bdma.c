@@ -18,13 +18,18 @@
 
 
 
+/**
+ * @brief Enable the BDMA controller clock.
+ * @param dma_rcc RCC clock enable bit for the BDMA controller.
+ *                When 0, falls back to __HAL_RCC_BDMA_CLK_ENABLE().
+ */
 static void stm32_bdma_enable_clock(rt_uint32_t dma_rcc)
 {
     rt_uint32_t tmpreg;
     if (dma_rcc == 0)
     {
         LOG_E("bdma enable clock failed, dma_rcc is 0");
-        __HAL_RCC_BDMA_CLK_ENABLE();//开启默认BDMA，避免空注册
+        __HAL_RCC_BDMA_CLK_ENABLE();
         return;
     }
     SET_BIT(RCC->AHB4ENR, dma_rcc);
@@ -32,6 +37,11 @@ static void stm32_bdma_enable_clock(rt_uint32_t dma_rcc)
     UNUSED(tmpreg);
 }
 
+/**
+ * @brief Apply a board-level BDMA descriptor to a HAL handle.
+ * @param bdma_handle DMA handle owned by one peripheral driver.
+ * @param bdma_config Board-level BDMA endpoint description.
+ */
 static void stm32_bdma_apply_config(DMA_HandleTypeDef *bdma_handle,
                               const struct stm32_bdma_config *bdma_config)
 {
@@ -111,6 +121,15 @@ rt_err_t stm32_bdma_init(DMA_HandleTypeDef *bdma_handle,
 }
 
 
+/**
+ * @brief Initialize a BDMA channel and expose it through the DMA slot.
+ * @param bdma_handle DMA handle owned by one peripheral driver.
+ * @param parent_handle Parent device that owns the DMA channel.
+ * @param dma_slot Output slot receiving the initialized handle.
+ * @param bdma_config Board-level BDMA endpoint description.
+ * @retval RT_EOK Setup succeeded.
+ * @retval -RT_ERROR HAL initialization failed.
+ */
 rt_err_t stm32_bdma_setup(DMA_HandleTypeDef *bdma_handle,
                           void *parent_handle,
                           DMA_HandleTypeDef **dma_slot,
@@ -143,6 +162,14 @@ rt_err_t stm32_bdma_setup(DMA_HandleTypeDef *bdma_handle,
 }
 
 
+/**
+ * @brief Deinitialize a BDMA channel and release its IRQ line.
+ * @param bdma_handle DMA handle owned by one peripheral driver.
+ * @param bdma_config Board-level BDMA endpoint description.
+ * @param abort_first Whether to abort an ongoing transfer before deinit.
+ * @retval RT_EOK Deinitialization succeeded.
+ * @retval -RT_ERROR HAL abort or deinit failed.
+ */
 rt_err_t stm32_bdma_deinit(DMA_HandleTypeDef *bdma_handle,
                            const struct stm32_bdma_config *bdma_config,
                            rt_bool_t abort_first)
