@@ -11,7 +11,7 @@
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pArmCC>6220000::V6.22::ARMCLANG</pArmCC>
-      <pCCUsed>6220000::V6.22::ARMCLANG</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -339,9 +339,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>__CLK_TCK=RT_TICK_PER_SECOND, USE_HAL_DRIVER, __RTTHREAD__, STM32H723xx, RT_USING_ARMLIBC, __STDC_LIMIT_MACROS, RT_USING_LIBC</Define>
+              <Define>__STDC_LIMIT_MACROS, USE_HAL_DRIVER, RT_USING_ARMLIBC, STM32H723xx, __RTTHREAD__, __CLK_TCK=RT_TICK_PER_SECOND, RT_USING_LIBC</Define>
               <Undefine></Undefine>
-              <IncludePath>applications\ws2812;..\..\..\components\drivers\phy;..\..\..\components\drivers\include;packages\stm32h7_hal_driver-latest\Inc\Legacy;..\..\..\components\libc\posix\io\epoll;board\CubeMX_Config\Inc;..\..\..\components\drivers\smp_call;..\..\..\components\libc\posix\io\poll;..\..\..\components\libc\compilers\common\extension\fcntl\octal;packages\stm32h7_hal_driver-latest\Inc;..\..\..\components\libc\posix\io\eventfd;..\libraries\HAL_Drivers\drivers;..\..\..\components\drivers\include;.;..\..\..\components\drivers\include;..\..\..\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\net\utest;..\libraries\HAL_Drivers\drivers\config;..\..\..\libcpu\arm\cortex-m7;..\..\..\components\finsh;..\..\..\libcpu\arm\common;applications;..\libraries\HAL_Drivers;..\..\..\components\drivers\spi;packages\CMSIS-Core-latest\Include;..\..\..\components\libc\compilers\common\include;..\..\..\components\libc\posix\ipc;..\..\..\components\drivers\include;..\..\..\components\libc\compilers\common\extension;board;packages\stm32h7_cmsis_driver-latest\Include</IncludePath>
+              <IncludePath>..\..\..\components\libc\compilers\common\include;..\..\..\components\drivers\include;..\..\..\components\libc\posix\io\eventfd;..\..\..\components\libc\posix\io\epoll;..\..\..\components\finsh;..\..\..\components\libc\posix\ipc;..\..\..\components\drivers\smp_call;..\..\..\components\libc\posix\io\poll;packages\stm32h7_hal_driver-latest\Inc;..\..\..\libcpu\arm\common;board;board\CubeMX_Config\Inc;..\..\..\include;..\..\..\libcpu\arm\cortex-m7;applications\ws2812;..\libraries\HAL_Drivers\drivers;..\..\..\components\drivers\include;..\..\..\components\drivers\include;applications;..\..\..\components\drivers\include;..\..\..\components\net\utest;..\..\..\components\drivers\include;packages\stm32h7_cmsis_driver-latest\Include;..\..\..\components\drivers\phy;..\libraries\HAL_Drivers\drivers\config;packages\CMSIS-Core-latest\Include;.;..\..\..\components\drivers\include;..\..\..\components\libc\compilers\common\extension;packages\stm32h7_hal_driver-latest\Inc\Legacy;..\..\..\components\drivers\include;..\..\..\components\drivers\spi;..\..\..\components\libc\compilers\common\extension\fcntl\octal;..\libraries\HAL_Drivers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1219,11 +1219,6 @@
         <Group>
           <GroupName>Drivers</GroupName>
           <Files>
-            <File>
-              <FileName>drv_bdma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\libraries\HAL_Drivers\drivers\drv_bdma.c</FilePath>
-            </File>
             <File>
               <FileName>drv_dma.c</FileName>
               <FileType>1</FileType>

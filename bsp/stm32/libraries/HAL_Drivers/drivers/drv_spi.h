@@ -22,7 +22,6 @@
 #include <rthw.h>
 #include <drv_common.h>
 #include "drv_dma.h"
-#include "drv_bdma.h"
 #include <ipc/completion.h>
 
 /* Enable STM32 hardware SPI driver code when any SPI instance is selected. */
