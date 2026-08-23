@@ -29,7 +29,7 @@ static struct rt_spi_configuration _ws2812_spi_cfg =
 
 rt_size_t ws2812_tx_buf_size(rt_uint16_t led_num);
 
-#if defined(BSP_WS2812_USING_SPI6) && defined(BSP_WS2812_USING_BDMA)
+#if defined(BSP_WS2812_USING_SPI6) && defined(BSP_SPI6_TX_USING_BDMA)
 static rt_uint8_t _ws2812_bdma_buf[WS2812_TX_BUF_SIZE(BSP_WS2812_LED_NUM)]
     __attribute__((section(".ws2812_bdma"), aligned(32)));
 #endif
@@ -76,12 +76,13 @@ int ws2812_hw_init(void)
         LOG_I("SPI max=%u Hz, encoding=%u-bit",
                     (unsigned int)_ws2812_spi_cfg.max_hz,
                     (unsigned int)WS2812_ENCODE_MODE_BITS);
-#if defined(BSP_WS2812_USING_SPI6) && defined(BSP_WS2812_USING_BDMA)
-    // Here we need to allocate a D3 field memory buffer for SPI BDMA.
+#if defined(BSP_WS2812_USING_SPI6) && defined(BSP_SPI6_TX_USING_BDMA)
+    /* BDMA can only access D3 domain SRAM4, use the static buffer placed
+     * there by the linker script instead of the heap. */
     _dev.buf = _ws2812_bdma_buf;
 #else
     _dev.buf = (rt_uint8_t *)rt_malloc(ws2812_tx_buf_size(BSP_WS2812_LED_NUM));
-#endif /*defined(BSP_WS2812_USING_SPI6) && defined(BSP_WS2812_USING_BDMA)*/
+#endif /*defined(BSP_WS2812_USING_SPI6) && defined(BSP_SPI6_TX_USING_BDMA)*/
     if (!_dev.buf)
     {
         LOG_E("Failed to allocate color buffer.");

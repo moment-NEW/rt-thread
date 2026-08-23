@@ -8,6 +8,7 @@ MEMORY
 {
     ROM (rx) : ORIGIN = 0x08000000, LENGTH = 1024k /* 1024KB flash */
     RAM (rw) : ORIGIN = 0x24000000, LENGTH =  320k /* 320K sram */
+    SRAM4 (rw) : ORIGIN = 0x38000000, LENGTH = 16k /* 16KB AHB SRAM D3, BDMA accessible */
 }
 ENTRY(Reset_Handler)
 _system_stack_size = 0x400;
@@ -120,6 +121,14 @@ SECTIONS
     __bss_end = .;
 
     _end = .;
+
+    /* BDMA-accessible buffers in D3 domain SRAM4 */
+    .ws2812_bdma (NOLOAD) :
+    {
+        . = ALIGN(32);
+        *(.ws2812_bdma)
+        *(.ws2812_bdma.*)
+    } > SRAM4
 
     /* Stabs debugging sections.  */
     .stab          0 : { *(.stab) }

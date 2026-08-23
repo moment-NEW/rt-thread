@@ -139,25 +139,42 @@
 #if defined(BSP_SPI_TX_USING_INT) || defined(BSP_SPI_RX_USING_INT)
 #define BSP_SPI_USING_INT
 #endif
+/* Aggregate BDMA transfer configuration from per-instance Kconfig macros.
+ * Only SPI6 lives in the D3 domain and can be served by BDMA on STM32H7. */
+#if defined(BSP_SPI6_TX_USING_BDMA)
+#define BSP_SPI_TX_USING_BDMA
+#endif
+
+#if defined(BSP_SPI6_RX_USING_BDMA)
+#define BSP_SPI_RX_USING_BDMA
+#endif
+
+#if defined(BSP_SPI6_TX_USING_BDMA) || defined(BSP_SPI6_RX_USING_BDMA)
+#define BSP_SPI6_USING_BDMA
+#endif
+
+#if defined(BSP_SPI_TX_USING_BDMA) || defined(BSP_SPI_RX_USING_BDMA)
+#define BSP_SPI_USING_BDMA
+#endif
 
 /* Aggregate IRQ requirements from DMA, BDMA and interrupt transfer modes. */
-#if defined(BSP_SPI1_USING_DMA) || defined(BSP_SPI1_USING_INT) || defined(BSP_SPI1_USING_BDMA)
+#if defined(BSP_SPI1_USING_DMA) || defined(BSP_SPI1_USING_INT) 
 #define BSP_SPI1_USING_IRQ
 #endif
 
-#if defined(BSP_SPI2_USING_DMA) || defined(BSP_SPI2_USING_INT) || defined(BSP_SPI2_USING_BDMA)
+#if defined(BSP_SPI2_USING_DMA) || defined(BSP_SPI2_USING_INT) 
 #define BSP_SPI2_USING_IRQ
 #endif
 
-#if defined(BSP_SPI3_USING_DMA) || defined(BSP_SPI3_USING_INT) || defined(BSP_SPI3_USING_BDMA)
+#if defined(BSP_SPI3_USING_DMA) || defined(BSP_SPI3_USING_INT) 
 #define BSP_SPI3_USING_IRQ
 #endif
 
-#if defined(BSP_SPI4_USING_DMA) || defined(BSP_SPI4_USING_INT) || defined(BSP_SPI4_USING_BDMA)
+#if defined(BSP_SPI4_USING_DMA) || defined(BSP_SPI4_USING_INT) 
 #define BSP_SPI4_USING_IRQ
 #endif
 
-#if defined(BSP_SPI5_USING_DMA) || defined(BSP_SPI5_USING_INT) || defined(BSP_SPI5_USING_BDMA)
+#if defined(BSP_SPI5_USING_DMA) || defined(BSP_SPI5_USING_INT) 
 #define BSP_SPI5_USING_IRQ
 #endif
 

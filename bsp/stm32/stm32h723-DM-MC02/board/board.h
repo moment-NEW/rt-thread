@@ -16,22 +16,9 @@
 #include "drv_common.h"
 #include "drv_gpio.h"
 
-/* BDMA transfer mode aggregation (SPI6 is the only BDMA-capable instance). */
-#if defined(BSP_SPI6_TX_USING_BDMA) || defined(BSP_SPI6_RX_USING_BDMA)
-#define BSP_SPI6_USING_BDMA
-#endif
-
-#if defined(BSP_SPI6_TX_USING_BDMA)
-#define BSP_SPI_TX_USING_BDMA
-#endif
-
-#if defined(BSP_SPI6_RX_USING_BDMA)
-#define BSP_SPI_RX_USING_BDMA
-#endif
-
-#if defined(BSP_SPI_TX_USING_BDMA) || defined(BSP_SPI_RX_USING_BDMA)
-#define BSP_SPI_USING_BDMA
-#endif
+/* NOTE: BDMA transfer mode aggregation macros (BSP_SPI*_USING_BDMA etc.)
+ * are provided by HAL_Drivers/drivers/drv_spi.h since commit 44978e3,
+ * do not redefine them here. */
 
 #ifdef __cplusplus
 extern "C" {
