@@ -1,0 +1,7 @@
+{
+  "keil": {
+    "project": "bsp/stm32/stm32h723-DM-MC02/project.uvprojx",
+    "target": "rtthread",
+    "log_dir": ".embeddedskills/build"
+  }
+}

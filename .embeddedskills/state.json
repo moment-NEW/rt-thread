@@ -1,0 +1,22 @@
+{
+  "last_build": {
+    "provider": "keil",
+    "action": "build",
+    "project": "bsp/stm32/stm32h723-DM-MC02/project.uvprojx",
+    "target": "rtthread",
+    "log_dir": ".embeddedskills/build",
+    "artifacts": {
+      "axf_file": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj/rt-thread.axf",
+      "flash_file": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj/rt-thread.axf",
+      "debug_file": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj/rt-thread.axf",
+      "output_dir": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj",
+      "log_file": ".embeddedskills/build/project-rtthread-build.log"
+    },
+    "axf_file": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj/rt-thread.axf",
+    "flash_file": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj/rt-thread.axf",
+    "debug_file": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj/rt-thread.axf",
+    "output_dir": "bsp/stm32/stm32h723-DM-MC02/build/keil/Obj",
+    "log_file": ".embeddedskills/build/project-rtthread-build.log",
+    "timestamp": "2026-08-29T09:22:03+08:00"
+  }
+}
