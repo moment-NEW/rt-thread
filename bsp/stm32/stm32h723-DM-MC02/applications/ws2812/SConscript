@@ -1,0 +1,12 @@
+from building import *
+
+cwd = GetCurrentDir()
+src = Glob('*.c')
+CPPPATH = [cwd]
+
+group = DefineGroup(
+    'WS2812', 
+    src,
+     depend = ['BSP_USING_WS2812'],
+     CPPPATH = CPPPATH)
+Return('group')
